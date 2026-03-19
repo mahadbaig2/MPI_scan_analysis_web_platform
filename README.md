@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CardioScan AI – AI-Powered MPI Scan Analyzer
 
-## Getting Started
+CardioScan AI is a state-of-the-art web platform designed to detect and predict heart diseases from Myocardial Perfusion Imaging (MPI) scans. This project leverages an ensemble of deep learning models (VGG16, ResNet50, and DenseNet121) to provide accurate diagnostic support, complemented by AI-generated clinical reports using the Groq API.
 
-First, run the development server:
+## 🌟 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Multi-Model Ensemble Analysis**: Uses three specialized CNN architectures (VGG16, ResNet50, DenseNet121) for robust classification.
+- **Premium Medical Dashboard**: A dark-themed, glassmorphic interface for seamless image uploading and analysis.
+- **AI-Generated Clinical Reports**: Powered by Groq's `kimi-k2` model, providing structured summaries, risk assessments, and clinical recommendations.
+- **Drag-and-Drop Upload**: Supports multiple formats including JPG, PNG, DICOM, and NPY.
+- **Analysis History**: Persistently store and review previous scan results and reports.
+- **Portable PDF Reports**: Generate and print professional clinical reports directly from the browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS v4 (Custom Design System)
+- **AI Engine**: Groq SDK (`moonshotai/kimi-k2-instruct-0905`)
+- **Backend Architecture**: API routes serving as a proxy for TensorFlow-based model inference.
+- **Authentication**: LocalStorage-based session management (extendable to Supabase).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+ 
+- NPM / Yarn / PNPM
+- A Groq API Key (from [console.groq.com](https://console.groq.com))
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/mahadbaig2/MPI_scan_analysis_web_platform.git
+   cd MPI_scan_analysis_web_platform
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Set up Environment Variables**:
+   Create a `.env.local` file in the root directory:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   PYTHON_BACKEND_URL=your_model_api_url_here (optional, defaults to mock for demo)
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Open the browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🧠 Model Deployment
+
+The deep learning models are designed to be served via a Python FastAPI backend or HuggingFace Spaces. 
+
+- **Models**: VGG16, ResNet50, DenseNet121 (plus a Proposed Model with feature masking).
+- **Input**: 224x224x1 Grayscale MPI Image.
+- **Output**: Sigmoid probability (Normal/Abnormal classification).
+
+For detailed instructions on deploying the models, refer to the [HuggingFace Deployment Guide](./huggingface_deployment_guide.md).
+
+## 📊 Performance Summary
+
+| Model | AUC | Accuracy | Sensitivity | Specificity |
+|-------|-----|----------|-------------|-------------|
+| VGG16 | 0.864 | 84.1% | 88.2% | 74.3% |
+| ResNet50 | 0.840 | 83.4% | 91.2% | 72.5% |
+| **DenseNet121** | **0.890** | **87.4%** | **93.0%** | **75.2%** |
+
+## 📜 Important Note
+
+This platform is a Final Year Project (FYP) and is intended for educational and demonstrative purposes only. It is **not** a substitute for professional medical diagnosis or consultation.
+
+---
+© 2026 CardioScan AI Team. Developed for MPI Heart Disease Prediction.
