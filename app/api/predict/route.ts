@@ -32,6 +32,12 @@ export async function POST(request: NextRequest) {
     }
 
     const predictions = await response.json();
+    
+    // If Python backend returned an error (e.g., model failed to load)
+    if (predictions.error) {
+      return NextResponse.json({ error: predictions.error }, { status: 500 });
+    }
+    
     return NextResponse.json(predictions);
   } catch (error) {
     console.error("Prediction error:", error);

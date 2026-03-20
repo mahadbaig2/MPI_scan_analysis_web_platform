@@ -6,7 +6,7 @@ CardioScan AI is a state-of-the-art web platform designed to detect and predict 
 
 - **Multi-Model Ensemble Analysis**: Uses three specialized CNN architectures (VGG16, ResNet50, DenseNet121) for robust classification.
 - **Premium Medical Dashboard**: A dark-themed, glassmorphic interface for seamless image uploading and analysis.
-- **AI-Generated Clinical Reports**: Powered by Groq's `kimi-k2` model, providing structured summaries, risk assessments, and clinical recommendations.
+- **AI-Generated Clinical Reports**: Powered by Groq's `moonshotai/kimi-k2-instruct-0905` model, providing structured summaries, risk assessments, and clinical recommendations.
 - **Drag-and-Drop Upload**: Supports multiple formats including JPG, PNG, DICOM, and NPY.
 - **Analysis History**: Persistently store and review previous scan results and reports.
 - **Portable PDF Reports**: Generate and print professional clinical reports directly from the browser.

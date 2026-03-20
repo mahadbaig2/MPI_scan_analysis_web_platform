@@ -387,7 +387,9 @@ function ResultsContent() {
           }}
         >
           {(["VGG16", "ResNet50", "DenseNet121"] as const).map((name) => {
-            const pred = result.predictions[name];
+            const pred = result.predictions[name as keyof typeof result.predictions] as ModelPrediction | undefined;
+            if (!pred) return null; // Skip rendering if model failed to run inference
+
             const modelColor =
               name === "VGG16"
                 ? "var(--accent-cyan)"
