@@ -66,14 +66,14 @@ function buildAnalysisPrompt(
   filename: string
 ): string {
   const modelEntries = Object.entries(predictions)
-    .filter(([key]) => key !== "ensemble")
+    .filter(([key]) => key !== "ensemble" && key !== "source")
     .map(
       ([name, pred]) =>
-        `- **${name}**: Probability = ${pred.probability.toFixed(4)} (${pred.prediction}), Risk Level = ${pred.risk_level}, Confidence = ${pred.confidence}%`
+        `- **${name}**: Probability = ${pred?.probability?.toFixed(4) || "N/A"} (${pred?.prediction || "Unknown"}), Risk Level = ${pred?.risk_level || "Unknown"}, Confidence = ${pred?.confidence || 0}%`
     )
     .join("\n");
 
-  const ensemble = predictions.ensemble;
+  const ensemble = predictions.ensemble || { probability: 0, prediction: "Unknown", risk_level: "Unknown", confidence: 0 };
 
   return `Please analyze the following MPI (Myocardial Perfusion Imaging) scan prediction results and generate a detailed medical report.
 
@@ -84,10 +84,10 @@ function buildAnalysisPrompt(
 ${modelEntries}
 
 ### Ensemble Prediction (Average of all models):
-- **Overall Probability**: ${ensemble.probability.toFixed(4)}
-- **Classification**: ${ensemble.prediction}
-- **Risk Level**: ${ensemble.risk_level}
-- **Confidence**: ${ensemble.confidence}%
+- **Overall Probability**: ${ensemble.probability?.toFixed(4) || "N/A"}
+- **Classification**: ${ensemble.prediction || "Unknown"}
+- **Risk Level**: ${ensemble.risk_level || "Unknown"}
+- **Confidence**: ${ensemble.confidence || 0}%
 
 ### Model Background:
 - VGG16: AUC = 0.864, Accuracy = 84.1%, trained on multi-source MPI datasets
