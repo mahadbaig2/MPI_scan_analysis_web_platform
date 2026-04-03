@@ -5,6 +5,14 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 interface User {
   email: string;
   name: string;
+  picture?: string;
+  provider?: "google" | "local";
+}
+
+interface GoogleUserInfo {
+  email: string;
+  name: string;
+  picture?: string;
 }
 
 interface AuthContextType {
@@ -12,13 +20,13 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: (userInfo: GoogleUserInfo) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function hashPassword(password: string): string {
-  // Simple hash for demo purposes (use bcrypt in production)
   let hash = 0;
   for (let i = 0; i < password.length; i++) {
     const char = password.charCodeAt(i);
@@ -33,7 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
     const stored = localStorage.getItem("cardioscan_user");
     if (stored) {
       try {
@@ -45,23 +52,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  const loginWithGoogle = async (userInfo: GoogleUserInfo) => {
+    try {
+      const userData: User = {
+        email: userInfo.email,
+        name: userInfo.name,
+        picture: userInfo.picture,
+        provider: "google",
+      };
+      setUser(userData);
+      localStorage.setItem("cardioscan_user", JSON.stringify(userData));
+      return { success: true };
+    } catch {
+      return { success: false, error: "Google sign-in failed. Please try again." };
+    }
+  };
+
   const signup = async (name: string, email: string, password: string) => {
-    // Check if user already exists
     const users = JSON.parse(localStorage.getItem("cardioscan_users") || "{}");
     if (users[email]) {
       return { success: false, error: "An account with this email already exists" };
     }
 
-    // Store user
-    users[email] = {
-      name,
-      email,
-      passwordHash: hashPassword(password),
-    };
+    users[email] = { name, email, passwordHash: hashPassword(password) };
     localStorage.setItem("cardioscan_users", JSON.stringify(users));
 
-    // Auto login
-    const userData = { email, name };
+    const userData: User = { email, name, provider: "local" };
     setUser(userData);
     localStorage.setItem("cardioscan_user", JSON.stringify(userData));
 
@@ -80,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: "Incorrect password" };
     }
 
-    const userData = { email: storedUser.email, name: storedUser.name };
+    const userData: User = { email: storedUser.email, name: storedUser.name, provider: "local" };
     setUser(userData);
     localStorage.setItem("cardioscan_user", JSON.stringify(userData));
 
@@ -93,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, signup, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
