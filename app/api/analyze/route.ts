@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build the prompt for Groq
     const prompt = buildAnalysisPrompt(predictions, filename);
 
     const chatCompletion = await groq.chat.completions.create({
