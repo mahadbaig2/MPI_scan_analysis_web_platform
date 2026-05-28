@@ -336,18 +336,111 @@ body {
   margin-bottom: 16px;
 }
 
+/* ===== CLINICAL REPORT (PRINTER FRIENDLY) ===== */
+.clinical-report-container {
+  background: white !important;
+  color: #1a1a1a !important;
+  padding: 0 !important;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+}
+
+.clinical-report-header {
+  background: #b91c1c; /* Dark red */
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clinical-report-title {
+  background: #f3f4f6;
+  border-top: 2px solid #1a1a1a;
+  border-bottom: 2px solid #1a1a1a;
+  color: #1a1a1a;
+  text-align: center;
+  font-weight: 800;
+  padding: 8px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin: 16px 24px;
+}
+
+.clinical-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 24px;
+  padding: 0 24px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.clinical-info-item {
+  display: flex;
+  gap: 4px;
+}
+
+.clinical-info-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.clinical-section-header {
+  background: #f3f4f6;
+  border: 1px solid #1a1a1a;
+  color: #1a1a1a;
+  font-weight: 800;
+  padding: 4px 12px;
+  font-size: 14px;
+  margin: 16px 24px 8px;
+  text-transform: uppercase;
+}
+
+.clinical-section-content {
+  padding: 0 24px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.clinical-impression-box {
+  border: 2px solid #1a1a1a;
+  padding: 12px;
+  margin: 24px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  background: #f9fafb;
+}
+
+.clinical-disclaimer-box {
+  margin: 32px 24px 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.ai-verified-badge {
+  border: 2px solid #b91c1c;
+  color: #b91c1c;
+  padding: 4px 12px;
+  font-weight: 900;
+  font-size: 12px;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
 @media print {
-  body {
-    background: #fff !important;
-    color: #000 !important;
-  }
-  .no-print {
-    display: none !important;
-  }
-  .report-section {
-    background: #fff !important;
-    border: 1px solid #ddd !important;
-    color: #000 !important;
-    break-inside: avoid;
+  .clinical-report-container {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
   }
 }
+

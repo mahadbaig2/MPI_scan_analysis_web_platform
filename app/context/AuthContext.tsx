@@ -52,6 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  // Sync user profile to Supabase (fire-and-forget)
+  const syncProfile = (userData: User) => {
+    fetch("/api/profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    }).catch(e => console.warn("Profile sync skipped:", e));
+  };
+
   const loginWithGoogle = async (userInfo: GoogleUserInfo) => {
     try {
       const userData: User = {
@@ -62,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       setUser(userData);
       localStorage.setItem("cardioscan_user", JSON.stringify(userData));
+      syncProfile(userData);
       return { success: true };
     } catch {
       return { success: false, error: "Google sign-in failed. Please try again." };
@@ -80,6 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userData: User = { email, name, provider: "local" };
     setUser(userData);
     localStorage.setItem("cardioscan_user", JSON.stringify(userData));
+    syncProfile(userData);
 
     return { success: true };
   };
@@ -99,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userData: User = { email: storedUser.email, name: storedUser.name, provider: "local" };
     setUser(userData);
     localStorage.setItem("cardioscan_user", JSON.stringify(userData));
+    syncProfile(userData);
 
     return { success: true };
   };
