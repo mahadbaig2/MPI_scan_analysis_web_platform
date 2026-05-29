@@ -139,8 +139,8 @@ export default function DashboardPage() {
 
         // 3. Map Supabase data — filter out any rows with missing predictions
         const supabaseHistory: AnalysisResult[] = (scans || [])
-          .filter(scan => scan.predictions && scan.predictions.ensemble)
-          .map(scan => ({
+          .filter((scan: any) => scan.predictions && scan.predictions.ensemble)
+          .map((scan: any) => ({
             id: scan.id,
             date: scan.created_at,
             filename: scan.filename,
