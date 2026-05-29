@@ -421,7 +421,7 @@ function ResultsContent() {
              <h3 style={{ fontSize: 18, fontWeight: 700 }}>Coronary Artery Condition Analysis</h3>
           </div>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { id: 'LAD', name: 'Left Anterior Descending', value: ensemble.vessels?.LAD || 0 },
               { id: 'LCX', name: 'Left Circumflex', value: ensemble.vessels?.LCX || 0 },
@@ -448,14 +448,7 @@ function ResultsContent() {
         </div>
 
         {/* Individual model results */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 16,
-            marginBottom: 32,
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {(["VGG16", "ResNet50", "DenseNet121"] as const).map((name) => {
             const pred = result.predictions[name as keyof typeof result.predictions] as ModelPrediction | undefined;
             if (!pred) return null; // Skip rendering if model failed to run inference
@@ -501,7 +494,7 @@ function ResultsContent() {
 
           <div className="clinical-report-title">MYOCARDIAL PERFUSION IMAGING FINAL REPORT</div>
 
-          <div className="clinical-info-grid">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-2 pb-4 mb-4 border-b border-gray-200 text-[13px] px-6">
             <div className="clinical-info-item"><span className="clinical-info-label">Patient Name:</span><span>{result.patient_info?.patient_name || "Not Provided"}</span></div>
             <div className="clinical-info-item"><span className="clinical-info-label">Gender:</span><span>{result.patient_info?.gender || "N/A"}</span></div>
             <div className="clinical-info-item"><span className="clinical-info-label">Date of Study:</span><span>{new Date(result.date).toLocaleDateString()}</span></div>
@@ -511,8 +504,8 @@ function ResultsContent() {
             <div className="clinical-info-item"><span className="clinical-info-label">Ordering Physician:</span><span>{result.patient_info?.ordering_physician || "N/A"}</span></div>
             <div className="clinical-info-item"><span className="clinical-info-label">Height:</span><span>{result.patient_info?.height ? `${result.patient_info.height} cm` : "N/A"}</span></div>
             <div className="clinical-info-item"><span className="clinical-info-label">Weight:</span><span>{result.patient_info?.weight ? `${result.patient_info.weight} kg` : "N/A"}</span></div>
-            <div className="clinical-info-item" style={{ gridColumn: "span 3" }}><span className="clinical-info-label">History:</span><span>{result.patient_info?.history || "None provided"}</span></div>
-            <div className="clinical-info-item" style={{ gridColumn: "span 3" }}><span className="clinical-info-label">Indications:</span><span>{result.patient_info?.indications || "None provided"}</span></div>
+            <div className="clinical-info-item md:col-span-3"><span className="clinical-info-label">History:</span><span>{result.patient_info?.history || "None provided"}</span></div>
+            <div className="clinical-info-item md:col-span-3"><span className="clinical-info-label">Indications:</span><span>{result.patient_info?.indications || "None provided"}</span></div>
           </div>
 
           <div

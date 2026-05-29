@@ -78,6 +78,7 @@ export default function LandingPage() {
 
       {/* ===== HERO ===== */}
       <section
+        className="hero-padding"
         style={{
           paddingTop: 140,
           paddingBottom: 100,
@@ -157,7 +158,7 @@ export default function LandingPage() {
           </div>
 
           <h1
-            className="animate-fade-in-up"
+            className="animate-fade-in-up hero-title"
             style={{
               fontSize: "clamp(36px, 5vw, 64px)",
               fontWeight: 800,
@@ -398,67 +399,69 @@ export default function LandingPage() {
         </div>
 
         <div className="glass-card" style={{ overflow: "hidden", padding: 0 }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-            <thead>
-              <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
-                {["Model", "AUC", "Accuracy", "Sensitivity", "Specificity", "F1-Score"].map((h) => (
-                  <th
-                    key={h}
+          <div className="table-container">
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
+                  {["Model", "AUC", "Accuracy", "Sensitivity", "Specificity", "F1-Score"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        padding: "16px 20px",
+                        textAlign: "left",
+                        fontWeight: 600,
+                        color: "var(--text-muted)",
+                        fontSize: 12,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: "VGG16", auc: "0.864", acc: "84.1%", sens: "88.2%", spec: "74.3%", f1: "0.811" },
+                  { name: "ResNet50", auc: "0.840", acc: "83.4%", sens: "91.2%", spec: "72.5%", f1: "0.851" },
+                  { name: "DenseNet121", auc: "0.890", acc: "87.4%", sens: "93.0%", spec: "75.2%", f1: "0.860", best: true },
+                ].map((model) => (
+                  <tr
+                    key={model.name}
                     style={{
-                      padding: "16px 20px",
-                      textAlign: "left",
-                      fontWeight: 600,
-                      color: "var(--text-muted)",
-                      fontSize: 12,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
+                      borderBottom: "1px solid var(--border-color)",
+                      background: model.best ? "var(--accent-cyan-dim)" : "transparent",
                     }}
                   >
-                    {h}
-                  </th>
+                    <td style={{ padding: "14px 20px", fontWeight: 600 }}>
+                      {model.name}
+                      {model.best && (
+                        <span
+                          style={{
+                            marginLeft: 8,
+                            fontSize: 10,
+                            background: "var(--accent-cyan)",
+                            color: "#000",
+                            padding: "2px 8px",
+                            borderRadius: "var(--radius-full)",
+                            fontWeight: 700,
+                          }}
+                        >
+                          BEST
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: "14px 20px", color: "var(--accent-cyan)", fontWeight: 600 }}>{model.auc}</td>
+                    <td style={{ padding: "14px 20px" }}>{model.acc}</td>
+                    <td style={{ padding: "14px 20px" }}>{model.sens}</td>
+                    <td style={{ padding: "14px 20px" }}>{model.spec}</td>
+                    <td style={{ padding: "14px 20px" }}>{model.f1}</td>
+                  </tr>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { name: "VGG16", auc: "0.864", acc: "84.1%", sens: "88.2%", spec: "74.3%", f1: "0.811" },
-                { name: "ResNet50", auc: "0.840", acc: "83.4%", sens: "91.2%", spec: "72.5%", f1: "0.851" },
-                { name: "DenseNet121", auc: "0.890", acc: "87.4%", sens: "93.0%", spec: "75.2%", f1: "0.860", best: true },
-              ].map((model) => (
-                <tr
-                  key={model.name}
-                  style={{
-                    borderBottom: "1px solid var(--border-color)",
-                    background: model.best ? "var(--accent-cyan-dim)" : "transparent",
-                  }}
-                >
-                  <td style={{ padding: "14px 20px", fontWeight: 600 }}>
-                    {model.name}
-                    {model.best && (
-                      <span
-                        style={{
-                          marginLeft: 8,
-                          fontSize: 10,
-                          background: "var(--accent-cyan)",
-                          color: "#000",
-                          padding: "2px 8px",
-                          borderRadius: "var(--radius-full)",
-                          fontWeight: 700,
-                        }}
-                      >
-                        BEST
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: "14px 20px", color: "var(--accent-cyan)", fontWeight: 600 }}>{model.auc}</td>
-                  <td style={{ padding: "14px 20px" }}>{model.acc}</td>
-                  <td style={{ padding: "14px 20px" }}>{model.sens}</td>
-                  <td style={{ padding: "14px 20px" }}>{model.spec}</td>
-                  <td style={{ padding: "14px 20px" }}>{model.f1}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

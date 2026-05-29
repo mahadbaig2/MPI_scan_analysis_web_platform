@@ -80,6 +80,7 @@ export default function DashboardPage() {
   const [history, setHistory] = useState<AnalysisResult[]>([]);
   const [activeTab, setActiveTab] = useState<"overview" | "upload" | "history">("overview");
   const [syncing, setSyncing] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [patientInfo, setPatientInfo] = useState<PatientInfo>({
     patient_name: "",
     date_of_birth: "",
@@ -349,19 +350,10 @@ export default function DashboardPage() {
   if (!user) return null;
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", display: "flex" }}>
+    <div className="dashboard-layout">
       {/* ===== SIDEBAR ===== */}
-      <aside
-        style={{
-          width: 260,
-          background: "var(--bg-secondary)",
-          borderRight: "1px solid var(--border-color)",
-          padding: "24px 16px",
-          display: "flex",
-          flexDirection: "column",
-          flexShrink: 0,
-        }}
-      >
+      <div className={`sidebar-overlay ${isMobileMenuOpen ? "open" : ""}`} onClick={() => setIsMobileMenuOpen(false)} />
+      <aside className={`dashboard-sidebar ${isMobileMenuOpen ? "open" : ""}`}>
         <div
           style={{
             display: "flex",
@@ -393,21 +385,21 @@ export default function DashboardPage() {
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
           <button
-            onClick={() => setActiveTab("overview")}
+            onClick={() => { setActiveTab("overview"); setIsMobileMenuOpen(false); }}
             className={`sidebar-link ${activeTab === "overview" ? "active" : ""}`}
             style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
           >
             <Zap size={18} /> Overview
           </button>
           <button
-            onClick={() => setActiveTab("upload")}
+            onClick={() => { setActiveTab("upload"); setIsMobileMenuOpen(false); }}
             className={`sidebar-link ${activeTab === "upload" ? "active" : ""}`}
             style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
           >
             <Upload size={18} /> New Analysis
           </button>
           <button
-            onClick={() => setActiveTab("history")}
+            onClick={() => { setActiveTab("history"); setIsMobileMenuOpen(false); }}
             className={`sidebar-link ${activeTab === "history" ? "active" : ""}`}
             style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
           >
@@ -457,7 +449,15 @@ export default function DashboardPage() {
       </aside>
 
       {/* ===== MAIN CONTENT ===== */}
-      <main style={{ flex: 1, padding: "32px 40px", overflowY: "auto", position: "relative" }}>
+      <main className="dashboard-main" style={{ flex: 1, padding: "32px 40px", overflowY: "auto", position: "relative" }}>
+        
+        {/* Mobile Header Toggle */}
+        <div className="mobile-menu-btn" style={{ marginBottom: 16 }}>
+          <button onClick={() => setIsMobileMenuOpen(true)} style={{ background: "none", border: "none", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <span style={{ fontSize: 18, fontWeight: 700 }}>Cardio<span style={{ color: "var(--accent-cyan)" }}>Scan</span> AI</span>
+          </button>
+        </div>
         {/* Sync Indicator */}
         {syncing && (
            <div style={{ position: "absolute", top: 32, right: 40, display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--text-muted)" }}>
@@ -475,9 +475,9 @@ export default function DashboardPage() {
         </div>
 
         {activeTab === "overview" && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Stats */}
-            <div style={{ gridColumn: "span 4" }}>
+            <div className="md:col-span-4">
               <StatCard 
                 title="Total Scans" 
                 value={totalScans.toString()} 
@@ -486,7 +486,7 @@ export default function DashboardPage() {
                 color="var(--accent-blue)" 
               />
             </div>
-            <div style={{ gridColumn: "span 4" }}>
+            <div className="md:col-span-4">
               <StatCard 
                 title="Abnormality Rate" 
                 value={`${abnormalityRate}%`} 
@@ -496,7 +496,7 @@ export default function DashboardPage() {
                 trend={{ value: "2.4%", isUp: false }}
               />
             </div>
-            <div style={{ gridColumn: "span 4" }}>
+            <div className="md:col-span-4">
               <StatCard 
                 title="Avg Confidence" 
                 value={`${avgConfidence}%`} 
@@ -507,7 +507,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Model Status */}
-            <div style={{ gridColumn: "span 4" }}>
+            <div className="md:col-span-4">
               <ModelStatus models={[
                 { name: "VGG16 Architecture", status: "online", accuracy: "84.1%", color: "var(--accent-cyan)" },
                 { name: "ResNet50 Backbone", status: "online", accuracy: "86.4%", color: "var(--accent-blue)" },
@@ -516,7 +516,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Upload Area (Small Version) */}
-            <div style={{ gridColumn: "span 8" }}>
+            <div className="md:col-span-8">
               <div
                 className={`upload-zone ${dragActive ? "dragging" : ""}`}
                 onDragEnter={handleDrag}
@@ -542,7 +542,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent Activity */}
-            <div style={{ gridColumn: "span 12" }}>
+            <div className="md:col-span-12">
               <RecentScans scans={history} onDelete={deleteHistoryItem} />
             </div>
           </div>
@@ -608,7 +608,7 @@ export default function DashboardPage() {
                         </div>
                      </div>
 
-                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 16 }}>
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
                            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>Patient Name *</label>
                            <input className="input-field" placeholder="e.g. John Doe" value={patientInfo.patient_name} onChange={e => handlePatientInfoChange("patient_name", e.target.value)} style={{ padding: "10px 14px", fontSize: 14 }} />
@@ -628,7 +628,7 @@ export default function DashboardPage() {
                         </div>
                      </div>
 
-                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, marginBottom: 16 }}>
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div>
                            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>Age</label>
                            <input className="input-field" type="number" placeholder="Auto" value={patientInfo.age} onChange={e => handlePatientInfoChange("age", e.target.value)} style={{ padding: "10px 14px", fontSize: 14 }} readOnly={!!patientInfo.date_of_birth} />
@@ -647,7 +647,7 @@ export default function DashboardPage() {
                         </div>
                      </div>
 
-                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>Ordering Physician</label>
                            <input className="input-field" value={user?.name || ""} readOnly style={{ padding: "10px 14px", fontSize: 14, opacity: 0.7 }} />
@@ -658,7 +658,7 @@ export default function DashboardPage() {
                         </div>
                      </div>
 
-                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>Stress Protocol</label>
                            <select className="input-field" value={patientInfo.stress_protocol} onChange={e => handlePatientInfoChange("stress_protocol", e.target.value)} style={{ padding: "10px 14px", fontSize: 14 }}>
@@ -694,7 +694,7 @@ export default function DashboardPage() {
                     </div>
                   )}
 
-                  <div style={{ display: "flex", gap: 16 }}>
+                  <div className="flex flex-col md:flex-row gap-4">
                      <button onClick={handleAnalyze} className="btn-primary" disabled={analyzing || !patientInfo.patient_name} style={{ flex: 1, padding: "14px 0", justifyContent: "center" }}>
                         {analyzing ? <><Loader2 size={18} className="animate-spin" /> Processing...</> : <><Brain size={18} /> Start Multi-Model Analysis</>}
                      </button>

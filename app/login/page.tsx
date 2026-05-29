@@ -88,7 +88,7 @@ export default function LoginPage() {
         filter: "blur(60px)", pointerEvents: "none",
       }} />
 
-      <div style={{
+      <div className="mobile-px-4 mobile-py-8" style={{
         width: "100%", maxWidth: 440, position: "relative",
         background: "rgba(26,31,53,0.75)",
         backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",

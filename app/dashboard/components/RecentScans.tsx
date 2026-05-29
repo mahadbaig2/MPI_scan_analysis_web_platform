@@ -46,82 +46,42 @@ export default function RecentScans({ scans, onDelete }: RecentScansProps) {
           <div
             key={scan.id}
             onClick={() => router.push(`/results?id=${scan.id}`)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 16px",
-              background: "var(--bg-card-hover)",
-              borderRadius: "var(--radius-md)",
-              border: "1px solid var(--border-color)",
-              cursor: "pointer",
-              transition: "transform 0.2s ease, border-color 0.2s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateX(4px)";
-              e.currentTarget.style.borderColor = "var(--border-glow)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.borderColor = "var(--border-color)";
-            }}
+            className="flex items-center justify-between p-3 sm:p-4 bg-[var(--bg-card-hover)] rounded-md border border-[var(--border-color)] cursor-pointer hover:translate-x-1 hover:border-[var(--border-glow)] transition-all duration-200"
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "var(--radius-sm)",
-                  background: "var(--bg-input)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-cyan)",
-                  border: "1px solid var(--border-color)"
-                }}
-              >
+            <div className="flex items-center gap-3 sm:gap-4 overflow-hidden mr-2">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-sm bg-[var(--bg-input)] flex items-center justify-center text-[var(--accent-cyan)] border border-[var(--border-color)] shrink-0">
                 <FileImage size={20} />
               </div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{scan.filename}</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12, color: "var(--text-muted)" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <div className="overflow-hidden">
+                <div className="text-[13px] sm:text-sm font-bold mb-1 truncate">{scan.filename}</div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] sm:text-xs text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1 whitespace-nowrap">
                     <Calendar size={12} /> {new Date(scan.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <span className="flex items-center gap-1 whitespace-nowrap">
                     <Shield size={12} /> {scan.predictions.ensemble.risk_level} Risk
                   </span>
                 </div>
               </div>
             </div>
             
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ textAlign: "right", marginRight: 8 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+            <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+              <div className="text-right mr-1 sm:mr-2">
+                <div className="text-[13px] sm:text-sm font-extrabold text-[var(--text-primary)]">
                   {(scan.predictions.ensemble.probability * 100).toFixed(0)}%
                 </div>
-                <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase" }}>Prob.</div>
+                <div className="text-[9px] sm:text-[10px] text-[var(--text-muted)] uppercase">Prob.</div>
               </div>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(scan.id);
                 }}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "var(--text-muted)",
-                  padding: 8,
-                  borderRadius: "50%",
-                  transition: "all 0.2s ease"
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "var(--accent-red)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-muted)"}
+                className="p-1.5 sm:p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--accent-red)] transition-colors shrink-0"
               >
                 <Trash2 size={14} />
               </button>
-              <ChevronRight size={18} style={{ color: "var(--text-muted)" }} />
+              <ChevronRight size={16} className="text-[var(--text-muted)] shrink-0 hidden sm:block" />
             </div>
           </div>
         ))}
